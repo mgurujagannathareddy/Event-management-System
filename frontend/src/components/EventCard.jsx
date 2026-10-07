@@ -1,4 +1,3 @@
-import React from "react";
 import './Event.css';
 const EventCard = ({ event, onEdit, onDelete }) => {
   return (

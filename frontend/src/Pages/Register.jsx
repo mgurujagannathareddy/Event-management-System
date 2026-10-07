@@ -2,15 +2,13 @@ import { useState } from "react";
 
 
 
-import Login from "./Login";
 import "./Register.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaUser, FaEnvelope, FaLock, FaPhone } from "react-icons/fa";
 import { toast } from "react-toastify";
 import api from "../api/axios";
 function Register() {
     const navigate = useNavigate();
-    const [login, SetLogin] = useState(false);
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -40,13 +38,9 @@ function Register() {
             setPhone("");
             navigate("/login");
         } catch (error) {
-            toast.error(error.response.data.message);
+            toast.error(error.response?.data?.message || "Registration failed");
         }
     };
-
-    if (login) {
-        return <Login />;
-    }
 
     return (
         <main>
@@ -78,6 +72,7 @@ function Register() {
                                 <input
                                     className="register-input"
                                     type="text"
+                                    required
                                     placeholder="Enter your full name"
                                     value={fullName}
                                     onChange={(e) => setFullName(e.target.value)}
@@ -91,6 +86,7 @@ function Register() {
                                 <input
                                     className="register-input"
                                     type="email"
+                                    required
                                     placeholder="Enter your email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
@@ -103,6 +99,7 @@ function Register() {
                                 <input
                                     className="register-input"
                                     type="password"
+                                    required
                                     placeholder="Enter password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
@@ -114,7 +111,8 @@ function Register() {
                             <div className="input-group">
                                 <input
                                     className="register-input"
-                                    type="number"
+                                    type="tel"
+                                    required
                                     placeholder="Enter phone number"
                                     value={phone}
                                     onChange={(e) => setPhone(e.target.value)}
@@ -132,13 +130,9 @@ function Register() {
                             <div className="register-login">
                                 <p>Already have an account?</p>
 
-                                <button
-                                    type="button"
-                                    className="register-login-btn"
-                                    onClick={() => SetLogin(true)}
-                                >
+                                <Link className="register-login-btn" to="/login">
                                     Login
-                                </button>
+                                </Link>
                             </div>
 
                         </form>

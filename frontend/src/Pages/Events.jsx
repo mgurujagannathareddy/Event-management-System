@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 
 import EventCard from "../components/EventCard";
@@ -25,7 +25,23 @@ const Events = () => {
   }
 
   useEffect(() => {
-    fetchEvents();
+    let cancelled = false;
+    api.get("/api/events")
+      .then((response) => {
+        if (!cancelled) {
+          setEvents(response.data);
+        }
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          toast.error("Failed to fetch events");
+          console.error(error);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const handleevent = async (e) => {
@@ -61,10 +77,7 @@ const Events = () => {
 
       fetchEvents();
     } catch (error) {
-      alert(
-        error.response?.data?.message ||
-        "Something went wrong"
-      );
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -90,7 +103,7 @@ const Events = () => {
       toast(response.data.message);
       fetchEvents();
     } catch (error) {
-      toast.error("Failed to delete event");
+      toast.error(error.response?.data?.message || "Failed to delete event");
       console.error(error);
     }
   };

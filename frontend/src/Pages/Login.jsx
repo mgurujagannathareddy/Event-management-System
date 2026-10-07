@@ -3,16 +3,11 @@ import { useState } from "react";
 
 
 import { Link } from 'react-router-dom';
-import Register from "./Register";
-import Home from "./Home";
 import './login.css'
 import { useNavigate } from "react-router-dom";
-import  {FaPhone,FaLock} from "react-icons/fa";
 import { toast } from "react-toastify";
 import api from "../api/axios";
 function Login() {
-    const [curUser, setCurUser] = useState(null);
-    const [show, setShow] = useState(false);
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
@@ -27,12 +22,8 @@ function Login() {
                 "/api/login", userData
             );
             localStorage.setItem("token", response.data.token);
-
-            if (response.data.message == "Login successful") {
-                localStorage.setItem("user", JSON.stringify(response.data.user.fullname));
-                toast.success("Hello " + response.data.user.fullname);
-                setCurUser(response.data.user.fullname);
-            }
+            localStorage.setItem("user", response.data.user.fullname);
+            toast.success("Hello " + response.data.user.fullname);
             navigate("/home",
                 {
                     state: {
@@ -41,12 +32,8 @@ function Login() {
                 }
             );
         } catch (error) {
-            console.log("error");
-            toast.error(error.response.data.message);
+            toast.error(error.response?.data?.message || "Login failed");
         }
-    }
-    if (show) {
-        return <Register />
     }
     return (
         <main>
@@ -73,7 +60,8 @@ function Login() {
                             <label className="login-form-label">Phone</label>
                             <input
                                 className="login-input"
-                                type="number"
+                                type="tel"
+                                required
                                 placeholder="Enter your number"
                                 value={phone}
                                 onChange={(e) => setPhone(e.target.value)}
@@ -86,6 +74,7 @@ function Login() {
                             <input
                                 className="login-input"
                                 type="password"
+                                required
                                 placeholder="Enter your password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}

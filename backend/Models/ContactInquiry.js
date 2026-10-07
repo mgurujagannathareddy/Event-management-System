@@ -1,0 +1,17 @@
+const mongoose = require('mongoose');
+
+const contactInquirySchema = new mongoose.Schema(
+    {
+        fullName: { type: String, required: true, trim: true },
+        phone: { type: String, required: true, trim: true },
+        email: { type: String, required: true, lowercase: true, trim: true },
+        eventType: { type: String, required: true, trim: true },
+        eventDate: { type: String, trim: true },
+        eventCity: { type: String, trim: true },
+        budget: { type: String, trim: true },
+        message: { type: String, trim: true },
+    },
+    { timestamps: true }
+);
+
+module.exports = mongoose.model('ContactInquiry', contactInquirySchema);

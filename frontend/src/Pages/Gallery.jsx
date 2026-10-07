@@ -1,4 +1,3 @@
-import React from "react";
 import "./Gallery.css";
 import i1 from "../assets/1.jpg";
 import i2 from "../assets/2.jpg";

@@ -1,6 +1,19 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import api from "../api/axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Contact.css";
+
+const emptyForm = {
+  fullName: "",
+  phone: "",
+  email: "",
+  eventType: "",
+  eventDate: "",
+  eventCity: "",
+  budget: "",
+  message: "",
+};
 
 const InfoCard = ({ label, title, subtitle }) => (
   <div className="info-card p-3 d-flex align-items-start gap-3">
@@ -14,25 +27,26 @@ const InfoCard = ({ label, title, subtitle }) => (
 );
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    phone: "",
-    email: "",
-    eventType: "",
-    eventDate: "",
-    eventCity: "",
-    budget: "",
-    message: "",
-  });
+  const [formData, setFormData] = useState(emptyForm);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    setIsSubmitting(true);
+    try {
+      const response = await api.post("/api/contact", formData);
+      toast.success(response.data.message);
+      setFormData(emptyForm);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to send message");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -176,8 +190,8 @@ const Contact = () => {
                     </div>
 
                     <div className="col-12">
-                      <button type="submit" className="btn btn-send w-100">
-                        Send Message →
+                      <button type="submit" className="btn btn-send w-100" disabled={isSubmitting}>
+                        {isSubmitting ? "Sending..." : "Send Message →"}
                       </button>
                     </div>
                   </div>

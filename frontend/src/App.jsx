@@ -1,4 +1,3 @@
-import React, { use } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -31,9 +30,9 @@ const App = () => {
           }
         >
           <Route index element={<Home />} />
-          <Route path="/home/events" element={<Events />} />
-          <Route path="/home/gallery" element={<Gallery />} />
-          <Route path="/home/contact" element={<Contact />} />
+          <Route path="events" element={<Events />} />
+          <Route path="gallery" element={<Gallery />} />
+          <Route path="contact" element={<Contact />} />
         </Route>
 
       </Routes>
